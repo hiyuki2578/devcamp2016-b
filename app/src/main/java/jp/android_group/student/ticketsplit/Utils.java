@@ -55,6 +55,7 @@ class Utils {
 			c.moveToNext();
 		}
 		c.close();
+		helper.close();
 		return list;
 	}
 

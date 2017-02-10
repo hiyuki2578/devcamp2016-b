@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 				try {
 					JSONObject ResultSet = response.getJSONObject("ResultSet");
 					JSONArray Course = ResultSet.getJSONArray("Course");
-					price(Course.getJSONObject(0).getString("SerializeData"));
+					price(Course.getJSONObject(0).getString("SerializeData"), response, 0);
 				}catch (JSONException e){
 					e.printStackTrace();
 				}
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			}
 		}));
 	}
-	public void price(String SerializeData){
+	public void price(String SerializeData, final JSONObject SearchResult, final int num){
 		final TextView result = (TextView)findViewById(R.id.result);
 		String uri = "http://api.ekispert.jp/v1/json/course/fare/divided?key=" + Key + "&serializeData=" + SerializeData;
 		mRequestQueue.add(new JsonObjectRequest(Request.Method.GET, uri, null, new Response.Listener<JSONObject>() {
@@ -136,9 +136,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 				try {
 					JSONObject ResultSet = response.getJSONObject("ResultSet");
 					JSONObject Ticket = ResultSet.getJSONObject("Ticket");
-					result.setText(Ticket.toString());//.getString("SerializeData"));
+					result.setText(Ticket.toString());
 				}catch (JSONException e){
 					e.printStackTrace();
+					try {
+						JSONObject Result = SearchResult.getJSONObject("ResultSet");
+						JSONArray Course = Result.getJSONArray("Course");
+						JSONObject SearchType = Course.getJSONObject(num);
+						JSONArray Price = SearchType.getJSONArray("Price");
+						JSONObject Route = SearchType.getJSONObject("Route");
+						JSONArray Point = Route.getJSONArray("Point");
+						result.setText(Point.getJSONObject(0).getJSONObject("Station").getString("Name")+"駅\n"+Price.getJSONObject(0).getString("Oneway")+"円\n"+Point.getJSONObject(1).getJSONObject("Station").getString("Name")+"駅");
+					}catch (JSONException er) {
+						er.printStackTrace();
+					}
 				}
 			}
 		}, new Response.ErrorListener() {
