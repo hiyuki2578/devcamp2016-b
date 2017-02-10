@@ -45,14 +45,6 @@
 		android:layout_alignParentStart="true"
 		android:id="@+id/Tx_Arr"/>
 
-	<Button
-		android:text="Search"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_below="@+id/Arr"
-		android:layout_alignStart="@+id/Arr"
-		android:id="@+id/button"/>
-
 	<TextView
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
@@ -60,4 +52,20 @@
 		android:id="@+id/result"
 		android:layout_below="@+id/button"
 		android:layout_alignParentStart="true"/>
+
+	<Button
+		android:text="Day"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_above="@+id/result"
+		android:layout_alignParentStart="true"
+		android:id="@+id/Day"/>
+
+	<Button
+		android:text="Search"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/button"
+		android:layout_below="@+id/Arr"
+		android:layout_alignStart="@+id/Arr"/>
 </RelativeLayout>

@@ -63,16 +63,6 @@ class Utils {
 		imm.hideSoftInputFromWindow(view.getWindowToken(), 0);	//IMを隠す
 	}
 
-	static void NoFocus(Context context, View view, boolean Focus, AutoCompleteTextView Ac){
-		if(!Focus){				//フォーカスが外れたとき
-			hideIME(context, view);
-		}else{
-			if(Ac.getText().length() != 0) {
-				Ac.showDropDown();
-			}
-		}
-	}
-
 	static void AutoComp(Context context, String str, AutoCompleteTextView Ac){
 		if(str.length() != 0) {
 			String[] sta = getDb(context, "Name", str, 1);
@@ -81,5 +71,4 @@ class Utils {
 			Ac.showDropDown();
 		}
 	}
-
 }
