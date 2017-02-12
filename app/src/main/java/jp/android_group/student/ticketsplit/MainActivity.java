@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		}
 
 		AutoCompleteTextView Dep = (AutoCompleteTextView)findViewById(R.id.Dep);
+		AutoCompleteTextView Via = (AutoCompleteTextView)findViewById(R.id.Via);
 		AutoCompleteTextView Arr = (AutoCompleteTextView)findViewById(R.id.Arr);
 		Button Search = (Button)findViewById(R.id.button);
 		Button Day = (Button)findViewById(R.id.Day);
@@ -65,6 +66,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 				AutoComp(MainActivity.this, s.toString() ,(AutoCompleteTextView)findViewById(R.id.Dep));
 			}
 		});
+		Via.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				AutoComp(MainActivity.this, s.toString() ,(AutoCompleteTextView)findViewById(R.id.Via));
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				AutoComp(MainActivity.this, s.toString() ,(AutoCompleteTextView)findViewById(R.id.Via));
+			}
+		});
 		Arr.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -82,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			}
 		});
 	}
+
 	public void onClick(View view) {
 		hideIME(this, view);
 		switch (view.getId()) {
@@ -93,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 				break;
 		}
 	}
+
 	@Override
 	public void onDateSet(DatePicker view, int year , int month, int day){	//日時指定でOKを押したときに呼ばれる
 		Button Day = (Button)findViewById(R.id.Day);
@@ -103,12 +122,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		DatePickerDialog datePickerDialog = new DatePickerDialog();
 		datePickerDialog.show(getFragmentManager(), "DatePicker");	//理解して
 	}
+
 	public void search(){
 		AutoCompleteTextView Dep = (AutoCompleteTextView)findViewById(R.id.Dep);
+		AutoCompleteTextView Via = (AutoCompleteTextView)findViewById(R.id.Via);
 		AutoCompleteTextView Arr = (AutoCompleteTextView)findViewById(R.id.Arr);
 		Button Day = (Button)findViewById(R.id.Day);
 		String Day_s = regex(Day.getText().toString(), "/");
-		String uri = "http://api.ekispert.jp/v1/json/search/course/plain?key=" + Key + "&from=" + Dep.getText() + "&to=" + Arr.getText() + "&shinkansen=false&plane=false&date=" + Day_s;
+		String uri = "https://api.ekispert.jp/v1/json/search/course/plain?key=" + Key + "&from=" + Dep.getText() + "&via=" + Via.getText() + "&to=" + Arr.getText() + "&shinkansen=false&plane=false&bus=false&date=" + Day_s;
+		if(Via.length() == 0){
+			uri = "https://api.ekispert.jp/v1/json/search/course/plain?key=" + Key + "&from=" + Dep.getText() + "&to=" + Arr.getText() + "&shinkansen=false&plane=false&date=" + Day_s;
+		}
 		mRequestQueue.add(new JsonObjectRequest(Request.Method.GET, uri, null, new Response.Listener<JSONObject>() {
 			@Override
 			public void onResponse(JSONObject response){
@@ -123,39 +147,90 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		}, new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {
-				Log.d("JsonSample",error.toString());
+				Log.d("Search_json",error.toString());
 			}
 		}));
 	}
+
 	public void price(String SerializeData, final JSONObject SearchResult, final int num){
 		final TextView result = (TextView)findViewById(R.id.result);
-		String uri = "http://api.ekispert.jp/v1/json/course/fare/divided?key=" + Key + "&serializeData=" + SerializeData;
+		final TextView trans = (TextView)findViewById(R.id.trans);
+		String uri = "https://api.ekispert.jp/v1/json/course/fare/divided?key=" + Key + "&serializeData=" + SerializeData;
 		mRequestQueue.add(new JsonObjectRequest(Request.Method.GET, uri, null, new Response.Listener<JSONObject>() {
 			@Override
 			public void onResponse(JSONObject response){
 				try {
+					String text = "";
+					String trans_t = "経路\n";
 					JSONObject ResultSet = response.getJSONObject("ResultSet");
 					JSONObject Ticket = ResultSet.getJSONObject("Ticket");
-					result.setText(Ticket.toString());
+					JSONArray Part = Ticket.getJSONArray("Part");
+					for(int i = 0;i < Part.length();i++){
+						JSONObject Point_i = Part.getJSONObject(i);
+						JSONArray Point = Point_i.getJSONArray("Point");
+						text += Point.getJSONObject(0).getJSONObject("Station").getString("Name") + "駅\n" + Point_i.getJSONObject("Price").getString("Oneway") + "円\n";//+Point.getJSONObject(1).getJSONObject("Station").getString("Name")+"駅\n";
+					}
+					JSONObject Result = SearchResult.getJSONObject("ResultSet");
+					JSONArray Course = Result.getJSONArray("Course");
+					JSONObject SearchType = Course.getJSONObject(num);
+					JSONObject Route = SearchType.getJSONObject("Route");
+					JSONArray Line = Route.getJSONArray("Line");
+					JSONArray Point = Route.getJSONArray("Point");
+					for(int i = 0;i < Point.length() - 1;i++){
+							trans_t += Point.getJSONObject(i).getJSONObject("Station").getString("Name") + "駅\n" + Line.getJSONObject(i).getString("Name") + "\n";// + Point.getJSONObject(i + 1).getJSONObject("Station").getString("Name") + "駅\n";
+					}
+					trans_t += Point.getJSONObject(Point.length() - 1).getJSONObject("Station").getString("Name") + "駅\n";
+					text += Point.getJSONObject(Point.length() - 1).getJSONObject("Station").getString("Name") + "駅\n";
+					result.setText(text);
+					trans.setText(trans_t);
 				}catch (JSONException e){
 					e.printStackTrace();
 					try {
+						String text = "";
+						String fare = "";
 						JSONObject Result = SearchResult.getJSONObject("ResultSet");
 						JSONArray Course = Result.getJSONArray("Course");
 						JSONObject SearchType = Course.getJSONObject(num);
 						JSONArray Price = SearchType.getJSONArray("Price");
 						JSONObject Route = SearchType.getJSONObject("Route");
+						JSONArray Line = Route.getJSONArray("Line");
 						JSONArray Point = Route.getJSONArray("Point");
-						result.setText(Point.getJSONObject(0).getJSONObject("Station").getString("Name")+"駅\n"+Price.getJSONObject(0).getString("Oneway")+"円\n"+Point.getJSONObject(1).getJSONObject("Station").getString("Name")+"駅");
+						for(int i = 0;i < Point.length() - 1;i++){
+							text += Point.getJSONObject(i).getJSONObject("Station").getString("Name") + "駅\n" + Line.getJSONObject(i).getString("Name") + "\n";// + Point.getJSONObject(i + 1).getJSONObject("Station").getString("Name") + "駅\n";
+							if(Price.getJSONObject(i + 1).getString("kind").equals("Fare")) {
+								fare += Point.getJSONObject(i).getJSONObject("Station").getString("Name") + "駅\n" + Price.getJSONObject(i + 1).getString("Oneway") + "円\n";// + Point.getJSONObject(Point.length() - 1).getJSONObject("Station").getString("Name") + "駅\n";
+							}
+						}
+						text += Point.getJSONObject(Point.length() - 1).getJSONObject("Station").getString("Name") + "駅";
+						fare += Point.getJSONObject(Point.length() - 1).getJSONObject("Station").getString("Name") + "駅";
+						result.setText(fare);
+						trans.setText(text);
 					}catch (JSONException er) {
 						er.printStackTrace();
+						try{
+							String text = "";
+							String trans_t = "";
+							JSONObject Result = SearchResult.getJSONObject("ResultSet");
+							JSONArray Course = Result.getJSONArray("Course");
+							JSONObject SearchType = Course.getJSONObject(num);
+							JSONArray Price = SearchType.getJSONArray("Price");
+							JSONObject Route = SearchType.getJSONObject("Route");
+							JSONObject Line = Route.getJSONObject("Line");
+							JSONArray Point = Route.getJSONArray("Point");
+							text += Point.getJSONObject(0).getJSONObject("Station").getString("Name")+"駅\n"+Line.getString("Name")+"\n"+Price.getJSONObject(0).getString("Oneway")+"円\n"+Point.getJSONObject(1).getJSONObject("Station").getString("Name")+"駅\n";
+							trans_t += Point.getJSONObject(0).getJSONObject("Station").getString("Name")+"駅\n"+Line.getString("Name")+"\n"+Point.getJSONObject(1).getJSONObject("Station").getString("Name")+"駅\n";
+							result.setText(text);
+							trans.setText(trans_t);
+						}catch (JSONException err) {
+							err.printStackTrace();
+						}
 					}
 				}
 			}
 		}, new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {
-				Log.d("JsonSample",error.toString());
+				Log.d("Price_json",error.toString());
 			}
 		}));
 	}

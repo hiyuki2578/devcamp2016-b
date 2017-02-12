@@ -1,11 +1,12 @@
 apply plugin: 'com.android.application'
+apply plugin: 'deploygate'
 
 android {
 	compileSdkVersion 25
 	buildToolsVersion "25.0.2"
 	defaultConfig {
 		applicationId "jp.android_group.student.ticketsplit"
-		minSdkVersion 25
+		minSdkVersion 21
 		targetSdkVersion 25
 		versionCode 1
 		versionName "1.0"
@@ -27,4 +28,6 @@ dependencies {
 	compile 'com.android.support:appcompat-v7:25.1.1'
 	compile project(':modules:volley')
 	testCompile 'junit:junit:4.12'
+
+	compile 'com.deploygate:sdk:3.1.1'
 }
