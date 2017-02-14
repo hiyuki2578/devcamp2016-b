@@ -93,7 +93,7 @@
 
         <Button
             android:id="@+id/Day"
-            android:layout_width="270px"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
             android:background="@null"
