@@ -4,4 +4,9 @@
 	<string name="via">Via</string>
 	<string name="destination">Destination</string>
 	<string name="search">Search</string>
+	<string name="Shinkansen">Use Shinkansen</string>
+	<string name="Plane">Use Plane</string>
+	<string name="limitedExpress">Use LimitedExpress</string>
+	<string name="Bus">Use Bus</string>
+	<string name="Settings">Settings</string>
 </resources>

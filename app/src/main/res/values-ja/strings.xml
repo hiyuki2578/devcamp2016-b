@@ -5,4 +5,9 @@
 	<string name="via">経由地</string>
 	<string name="destination">目的地</string>
 	<string name="search">検索</string>
+	<string name="Shinkansen">新幹線を使う</string>
+	<string name="Plane">飛行機を使う</string>
+	<string name="limitedExpress">有料特急を使う</string>
+	<string name="Bus">バスを使う</string>
+	<string name="Settings">検索設定</string>
 </resources>

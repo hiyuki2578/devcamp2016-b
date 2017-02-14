@@ -1,12 +1,17 @@
 package jp.android_group.student.ticketsplit;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
@@ -159,6 +164,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		}
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item){
+		switch (item.getItemId()){
+			case R.id.settings:
+				Intent intent = new Intent(this, Preference.class);
+				startActivity(intent);
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu){
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
 	public void onClick(View view) {
 		hideIME(this, view);
 		switch (view.getId()) {
@@ -183,15 +204,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	}
 
 	public void search(){
+		SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(this);
 		AutoCompleteTextView Dep = (AutoCompleteTextView)findViewById(R.id.Dep);
 		AutoCompleteTextView Via = (AutoCompleteTextView)findViewById(R.id.Via);
 		AutoCompleteTextView Arr = (AutoCompleteTextView)findViewById(R.id.Arr);
 		final TextView textView = (TextView)findViewById(R.id.result);
 		Button Day = (Button)findViewById(R.id.Day);
-		String Day_s = regex(Day.getText().toString(), "/");
-		String uri = "https://api.ekispert.jp/v1/json/search/course/plain?key=" + Key + "&from=" + Dep.getText() + "&via=" + Via.getText() + "&to=" + Arr.getText() + "&plane=false&limitedExpress=false&bus=false&date=" + Day_s;
+		String Day_s = regex(Day.getText().toString(), "/", "");
+		String uri = "https://api.ekispert.jp/v1/json/search/course/plain?key=" + Key + "&from=" + Dep.getText() + "&via=" + Via.getText() + "&to=" + Arr.getText() + getOption(spf) + "&date=" + Day_s;
 		if(Via.length() == 0){
-			uri = "https://api.ekispert.jp/v1/json/search/course/plain?key=" + Key + "&from=" + Dep.getText() + "&to=" + Arr.getText() + "&limitedExpress=false&plane=false&bus=false&date=" + Day_s;
+			uri = "https://api.ekispert.jp/v1/json/search/course/plain?key=" + Key + "&from=" + Dep.getText() + "&to=" + Arr.getText() + getOption(spf) + "&date=" + Day_s;
 		}
 		mRequestQueue.add(new JsonObjectRequest(Request.Method.GET, uri, null, new Response.Listener<JSONObject>() {
 			@Override
