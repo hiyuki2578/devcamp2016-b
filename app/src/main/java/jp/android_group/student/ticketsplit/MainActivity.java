@@ -1,8 +1,12 @@
 package jp.android_group.student.ticketsplit;
 
 import android.content.Context;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -35,15 +39,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 	private RequestQueue mRequestQueue;
 	private View mFocusView;
+	private BottomSheetBehavior behavior;
 	String Key = getKey();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		Toolbar toolbar = (Toolbar)findViewById(R.id.tool_bar);
+		toolbar.setTitle(getResources().getText(R.string.searchResult));
 
 		mFocusView = findViewById(R.id.focusView);
 		mFocusView.requestFocus();
+
+		// ボトムシートを隠す
+		View bottomSheet = findViewById(R.id.bottom_sheet);
+		BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
+		behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
 		if (mRequestQueue == null) {
 			mRequestQueue = Volley.newRequestQueue(getApplicationContext());
@@ -183,6 +196,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	}
 
 	public void search(){
+		View bottomSheet = findViewById(R.id.bottom_sheet);
+		BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
+		behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 		AutoCompleteTextView Dep = (AutoCompleteTextView)findViewById(R.id.Dep);
 		AutoCompleteTextView Via = (AutoCompleteTextView)findViewById(R.id.Via);
 		AutoCompleteTextView Arr = (AutoCompleteTextView)findViewById(R.id.Arr);
