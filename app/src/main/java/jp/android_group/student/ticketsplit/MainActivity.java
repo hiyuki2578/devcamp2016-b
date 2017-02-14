@@ -31,7 +31,7 @@ import java.util.Locale;
 import static jp.android_group.student.ticketsplit.Utils.*;
 import static jp.android_group.student.ticketsplit.getApiKey.*;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, android.app.DatePickerDialog.OnDateSetListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener, android.app.DatePickerDialog.OnDateSetListener {
 
 	private RequestQueue mRequestQueue;
 	private View mFocusView;
@@ -57,6 +57,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		Day.setText(getDate("yyyy/MM/dd"));
 		Search.setOnClickListener(this);
 		Day.setOnClickListener(this);
+		Dep.setOnFocusChangeListener(this);
+		Via.setOnFocusChangeListener(this);
+		Arr.setOnFocusChangeListener(this);
 		Dep.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -71,13 +74,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			@Override
 			public void afterTextChanged(Editable s) {
 				AutoComp(MainActivity.this, s.toString() ,(AutoCompleteTextView)findViewById(R.id.Dep));
-			}
-			public void onFocusChange(View v, boolean hasFocus) {
-				if(!hasFocus) {
-					// フォーカスが外れた場合キーボードを非表示にする
-					InputMethodManager inputMethodMgr = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
-					inputMethodMgr.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-				}
 			}
 		});
 		Via.addTextChangedListener(new TextWatcher() {
@@ -95,13 +91,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			public void afterTextChanged(Editable s) {
 				AutoComp(MainActivity.this, s.toString() ,(AutoCompleteTextView)findViewById(R.id.Via));
 			}
-			public void onFocusChange(View v, boolean hasFocus) {
-				if(!hasFocus) {
-					// フォーカスが外れた場合キーボードを非表示にする
-					InputMethodManager inputMethodMgr = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
-					inputMethodMgr.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-				}
-			}
 		});
 		Arr.addTextChangedListener(new TextWatcher() {
 			@Override
@@ -118,15 +107,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			public void afterTextChanged(Editable s) {
 				AutoComp(MainActivity.this, s.toString() ,(AutoCompleteTextView)findViewById(R.id.Arr));
 			}
-
-			public void onFocusChange(View v, boolean hasFocus) {
-				if(!hasFocus) {
-					// フォーカスが外れた場合キーボードを非表示にする
-					InputMethodManager inputMethodMgr = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
-					inputMethodMgr.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-				}
-			}
-
 		});
 
 		// キーボードのエンターを取得
@@ -167,9 +147,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			}
 		});
 
+	}
 
-
-
+	public void onFocusChange(View view, boolean hasFocus){
+		switch(view.getId()) {
+			case R.id.Dep:
+			case R.id.Via:
+			case R.id.Arr:
+				NoFocus(this, view, hasFocus, (AutoCompleteTextView) findViewById(view.getId()));
+				break;
+		}
 	}
 
 	public void onClick(View view) {
@@ -319,7 +306,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		}, new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {
-				Log.d("Price_json",error.toString());
 				try {
 					String text = "";
 					String fare = "";
