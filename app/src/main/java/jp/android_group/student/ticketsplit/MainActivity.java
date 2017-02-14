@@ -72,6 +72,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			public void afterTextChanged(Editable s) {
 				AutoComp(MainActivity.this, s.toString() ,(AutoCompleteTextView)findViewById(R.id.Dep));
 			}
+			public void onFocusChange(View v, boolean hasFocus) {
+				if(!hasFocus) {
+					// フォーカスが外れた場合キーボードを非表示にする
+					InputMethodManager inputMethodMgr = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+					inputMethodMgr.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+				}
+			}
 		});
 		Via.addTextChangedListener(new TextWatcher() {
 			@Override
@@ -87,6 +94,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			@Override
 			public void afterTextChanged(Editable s) {
 				AutoComp(MainActivity.this, s.toString() ,(AutoCompleteTextView)findViewById(R.id.Via));
+			}
+			public void onFocusChange(View v, boolean hasFocus) {
+				if(!hasFocus) {
+					// フォーカスが外れた場合キーボードを非表示にする
+					InputMethodManager inputMethodMgr = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+					inputMethodMgr.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+				}
 			}
 		});
 		Arr.addTextChangedListener(new TextWatcher() {
@@ -114,10 +128,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			}
 
 		});
+
+		// キーボードのエンターを取得
 		Arr.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 				if (event == null || event.getAction() == KeyEvent.ACTION_UP) {
 					search();
+					mFocusView.requestFocus();
+					InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+				}
+				return true;
+			}
+		});
+
+		Via.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				if (event == null || event.getAction() == KeyEvent.ACTION_UP) {
+					mFocusView.requestFocus();
+					InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+				}
+				return true;
+			}
+		});
+
+		Dep.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				if (event == null || event.getAction() == KeyEvent.ACTION_UP) {
 					mFocusView.requestFocus();
 					InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 					imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
