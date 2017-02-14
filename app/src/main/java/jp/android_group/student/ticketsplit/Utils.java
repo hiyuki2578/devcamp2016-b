@@ -32,12 +32,15 @@ class Utils {
 		return format.format(date);		//Stringでリターン
 	}
 
-	static String getCheck(CheckBox chk){
-		if(chk.isChecked()){	//ここはコメントなくても理解して
-			return "true";
-		}else{
-			return "false";
-		}
+	static String getLineName(String str){
+		str = regex(str, "中央特快");
+		str = regex(str, "準特急");
+		str = regex(str, "アクセス快特");
+		str = regex(str, "快特");
+		str = regex(str, "特急");
+		str = regex(str, "急行");
+		str = regex(str, "快速");
+		return str;
 	}
 
 	private static String[] getDb(Context context, String ans_name, String query, int Like){
