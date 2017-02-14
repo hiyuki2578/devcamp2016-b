@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		AutoCompleteTextView Arr = (AutoCompleteTextView)findViewById(R.id.Arr);
 		Button Day = (Button)findViewById(R.id.Day);
 		String Day_s = regex(Day.getText().toString(), "/");
-		String uri = "https://api.ekispert.jp/v1/json/search/course/plain?key=" + Key + "&from=" + Dep.getText() + "&via=" + Via.getText() + "&to=" + Arr.getText() + "&shinkansen=false&plane=false&bus=false&date=" + Day_s;
+		String uri = "https://api.ekispert.jp/v1/json/search/course/plain?key=" + Key + "&from=" + Dep.getText() + "&via=" + Via.getText() + "&to=" + Arr.getText() + "&plane=false&bus=false&date=" + Day_s;
 		if(Via.length() == 0){
 			uri = "https://api.ekispert.jp/v1/json/search/course/plain?key=" + Key + "&from=" + Dep.getText() + "&to=" + Arr.getText() + "&shinkansen=false&plane=false&date=" + Day_s;
 		}
@@ -195,10 +195,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 						JSONObject Route = SearchType.getJSONObject("Route");
 						JSONArray Line = Route.getJSONArray("Line");
 						JSONArray Point = Route.getJSONArray("Point");
+						int j = -1;
 						for(int i = 0;i < Point.length() - 1;i++){
 							text += Point.getJSONObject(i).getJSONObject("Station").getString("Name") + "駅\n" + Line.getJSONObject(i).getString("Name") + "\n";// + Point.getJSONObject(i + 1).getJSONObject("Station").getString("Name") + "駅\n";
-							if(Price.getJSONObject(i + 1).getString("kind").equals("Fare")) {
-								fare += Point.getJSONObject(i).getJSONObject("Station").getString("Name") + "駅\n" + Price.getJSONObject(i + 1).getString("Oneway") + "円\n";// + Point.getJSONObject(Point.length() - 1).getJSONObject("Station").getString("Name") + "駅\n";
+							if(Integer.parseInt(Price.getJSONObject(i - j).getString("fromLineIndex")) == i + 1) {
+								fare += Point.getJSONObject(i).getJSONObject("Station").getString("Name") + "駅\n" + Price.getJSONObject(i - j).getString("Oneway") + "円\n";// + Point.getJSONObject(Point.length() - 1).getJSONObject("Station").getString("Name") + "駅\n";
+							}else{
+								j += 1;
 							}
 						}
 						text += Point.getJSONObject(Point.length() - 1).getJSONObject("Station").getString("Name") + "駅";
