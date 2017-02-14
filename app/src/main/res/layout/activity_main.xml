@@ -32,14 +32,6 @@
             android:text=""
             tools:ignore="LabelFor,RelativeOverlap" />
 
-        <TextView
-            android:id="@+id/Tx_Dep"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:text="@string/depature" />
-
         <AutoCompleteTextView
             android:id="@+id/Via"
             android:layout_width="wrap_content"
@@ -60,37 +52,55 @@
             android:text=""
             tools:ignore="LabelFor" />
 
-        <TextView
-            android:id="@+id/Tx_Arr"
+        <ImageButton
+            android:id="@+id/button"
+            android:src="@drawable/ic_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/Tx_Via"
-            android:layout_below="@+id/Via"
-            android:text="@string/destination" />
+            android:text="@string/search"
+            android:layout_below="@+id/Arr"
+            android:layout_alignParentEnd="true"
+            android:background="@null"
+            android:layout_alignBottom="@+id/Day" />
+
+        <TextView
+            android:id="@+id/Tx_Dep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/depature"
+            android:layout_alignBaseline="@+id/Dep"
+            android:layout_alignBottom="@+id/Dep"
+            android:layout_toEndOf="@+id/focusView" />
 
         <TextView
             android:id="@+id/Tx_Via"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/via"
+            android:layout_alignBaseline="@+id/Via"
+            android:layout_alignBottom="@+id/Via"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/Dep"
-            android:text="@string/via" />
+            android:layout_alignEnd="@+id/Tx_Dep" />
+
+        <TextView
+            android:id="@+id/Tx_Arr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/destination"
+            android:layout_alignBaseline="@+id/Arr"
+            android:layout_alignBottom="@+id/Arr"
+            android:layout_alignParentStart="true" />
 
         <Button
             android:id="@+id/Day"
-            android:layout_width="wrap_content"
+            android:layout_width="270px"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
+            android:text=""
+            android:background="@null"
+            android:drawableLeft="@drawable/ic_day"
             android:layout_below="@+id/Arr"
-            android:text="" />
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/Arr"
-            android:layout_below="@+id/Arr"
-            android:text="@string/search" />
+            android:layout_toStartOf="@+id/button"
+            android:layout_marginEnd="17dp" />
 
     </RelativeLayout>
 
