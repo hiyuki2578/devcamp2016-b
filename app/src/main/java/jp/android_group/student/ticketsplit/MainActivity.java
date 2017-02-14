@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -199,7 +200,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		hideIME(this, view);
 		switch (view.getId()) {
 			case R.id.button:
-				search();
+                AutoCompleteTextView Dep = (AutoCompleteTextView)findViewById(R.id.Dep);
+                AutoCompleteTextView Via = (AutoCompleteTextView)findViewById(R.id.Via);
+                AutoCompleteTextView Arr = (AutoCompleteTextView)findViewById(R.id.Arr);
+                if (Dep != null ||  Via != null || Arr != null) {
+                    search();
+                } else {
+                    Toast.makeText(this, "ちゃんと入力してね！", Toast.LENGTH_LONG).show();
+                }
 				break;
 			case R.id.Day:
 				showDatePickerDialog(view);
