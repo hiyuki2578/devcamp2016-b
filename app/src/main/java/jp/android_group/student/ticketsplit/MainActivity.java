@@ -45,8 +45,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	private RequestQueue mRequestQueue;
 	private View mFocusView;
 	private BottomSheetBehavior behavior;
+	private Toolbar toolbar;
 	String Key = getKey();
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -210,6 +210,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	public void onDateSet(DatePicker view, int year , int month, int day){	//日時指定でOKを押したときに呼ばれる
 		Button Day = (Button)findViewById(R.id.Day);
 		Day.setText(String.valueOf(year) + "/" + String.format(Locale.JAPAN,"%1$02d",month + 1) + "/" + String.format(Locale.JAPAN,"%1$02d",day));	// 2016/10/12 形式で返す "%1$02d"で2桁で返す
+	}
+
+	// 戻るButtonイベント取得
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(keyCode==KeyEvent.KEYCODE_BACK){
+			View bottomSheet = findViewById(R.id.bottom_sheet);
+			BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
+			behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+			return true;
+		}
+		return false;
 	}
 
 	public void showDatePickerDialog(View view){
