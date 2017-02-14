@@ -1,11 +1,14 @@
 package jp.android_group.student.ticketsplit;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -31,12 +34,16 @@ import static jp.android_group.student.ticketsplit.getApiKey.*;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, android.app.DatePickerDialog.OnDateSetListener {
 
 	private RequestQueue mRequestQueue;
+	private View mFocusView;
 	String Key = getKey();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		mFocusView = findViewById(R.id.focusView);
+		mFocusView.requestFocus();
 
 		if (mRequestQueue == null) {
 			mRequestQueue = Volley.newRequestQueue(getApplicationContext());
@@ -97,7 +104,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			public void afterTextChanged(Editable s) {
 				AutoComp(MainActivity.this, s.toString() ,(AutoCompleteTextView)findViewById(R.id.Arr));
 			}
+
+			public void onFocusChange(View v, boolean hasFocus) {
+				if(!hasFocus) {
+					// フォーカスが外れた場合キーボードを非表示にする
+					InputMethodManager inputMethodMgr = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+					inputMethodMgr.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+				}
+			}
+
 		});
+		Arr.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				if (event == null || event.getAction() == KeyEvent.ACTION_UP) {
+					search();
+					mFocusView.requestFocus();
+					InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+				}
+				return true;
+			}
+		});
+
+
+
+
 	}
 
 	public void onClick(View view) {
