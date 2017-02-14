@@ -18,10 +18,11 @@
 		android:id="@+id/Dep"
 		android:ems="10"
 		android:layout_alignParentTop="true"
-		android:layout_alignParentEnd="true"/>
+		android:layout_alignParentEnd="true"
+		tools:ignore="LabelFor,RelativeOverlap"/>
 
 	<TextView
-		android:text="Departure"
+		android:text="@string/depature"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignParentTop="true"
@@ -35,7 +36,8 @@
 		android:ems="10"
 		android:id="@+id/Via"
 		android:layout_below="@+id/Dep"
-		android:layout_alignStart="@+id/Dep"/>
+		android:layout_alignStart="@+id/Dep"
+		tools:ignore="LabelFor"/>
 
 	<AutoCompleteTextView
 		android:text=""
@@ -44,10 +46,11 @@
 		android:id="@+id/Arr"
 		android:ems="10"
 		android:layout_below="@+id/Via"
-		android:layout_alignParentEnd="true"/>
+		android:layout_alignParentEnd="true"
+		tools:ignore="LabelFor"/>
 
 	<TextView
-		android:text="Arrival"
+		android:text="@string/destination"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:id="@+id/Tx_Arr"
@@ -55,7 +58,7 @@
 		android:layout_below="@+id/Via"/>
 
 	<TextView
-		android:text="Via"
+		android:text="@string/via"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:id="@+id/Tx_Via"
@@ -63,7 +66,7 @@
 		android:layout_alignParentStart="true"/>
 
 	<Button
-		android:text="Day"
+		android:text=""
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:id="@+id/Day"
@@ -71,7 +74,7 @@
 		android:layout_alignParentStart="true"/>
 
 	<Button
-		android:text="Search"
+		android:text="@string/search"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:id="@+id/button"
@@ -88,8 +91,6 @@
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_below="@+id/Day"
-			android:layout_alignEnd="@+id/Tx_Dep"
 			android:id="@+id/trans"
 			android:layout_weight="1"/>
 
@@ -97,8 +98,6 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:id="@+id/result"
-			android:layout_below="@+id/button"
-			android:layout_alignStart="@+id/button"
 			android:layout_weight="1"/>
 	</LinearLayout>
 </RelativeLayout>

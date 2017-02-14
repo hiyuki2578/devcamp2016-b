@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Ticket Split</string>
+	<string name="depature">出発地</string>
+	<string name="via">経由地</string>
+	<string name="destination">目的地</string>
+	<string name="search">検索</string>
+</resources>
