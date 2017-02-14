@@ -1,13 +1,13 @@
 package jp.android_group.student.ticketsplit;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.CheckBox;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,10 +20,10 @@ import java.util.regex.Pattern;
  */
 
 class Utils {
-	static String regex(String str, String regex){
+	static String regex(String str, String regex, String pat){
 		Pattern pattern = Pattern.compile(regex);	//検索文字列のセット
 		Matcher matcher = pattern.matcher(str);		//変換前文字列設定
-		return matcher.replaceAll("");				//置き換えて戻す
+		return matcher.replaceAll(pat);				//置き換えて戻す
 	}
 
 	static String getDate(String str){
@@ -32,14 +32,41 @@ class Utils {
 		return format.format(date);		//Stringでリターン
 	}
 
+	static String getOption(SharedPreferences spf){
+		String options="";
+		if(!spf.getBoolean("plane",false)){
+			options += "&plane=false";
+		}
+		if(!spf.getBoolean("shinkansen",false)){
+			options += "&shinkansen=false";
+		}
+		if(!spf.getBoolean("limitedExpress",false)){
+			options += "&limitedExpress=false";
+		}
+		if(!spf.getBoolean("bus",false)){
+			options += "&bus=false";
+		}
+		return options;
+	}
+
 	static String getLineName(String str){
-		str = regex(str, "中央特快");
-		str = regex(str, "準特急");
-		str = regex(str, "アクセス快特");
-		str = regex(str, "快特");
-		str = regex(str, "特急");
-		str = regex(str, "急行");
-		str = regex(str, "快速");
+		str = regex(str, "中央特快", "");
+		str = regex(str, "準特急", "");
+		str = regex(str, "アクセス特急", "");
+		str = regex(str, "快速エアポート", "千歳線・函館本線");
+		str = regex(str, "準急", "");
+		str = regex(str, "区間快速", "");
+		str = regex(str, "快特", "");
+		str = regex(str, "空港快速", "");
+		str = regex(str, "新快速", "");
+		str = regex(str, "特急", "");
+		str = regex(str, "急行", "");
+		str = regex(str, "快速", "");
+		str = regex(str, "京阪神", "京阪神快速");
+		str = regex(str, "大和路", "大和路快速");
+		str = regex(str, "関空", "関空快速");
+		str = regex(str, "紀州路", "紀州路快速");
+		str = regex(str, "南海線空港", "南海線空港快速");
 		return str;
 	}
 
