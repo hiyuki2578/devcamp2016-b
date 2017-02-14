@@ -71,29 +71,7 @@
 		android:layout_below="@+id/Dep"
 		android:layout_alignParentStart="true"/>
 
-	<Button
-		android:text=""
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:id="@+id/Day"
-		android:layout_below="@+id/Arr"
-		android:layout_alignParentStart="true"/>
-
-	<Button
-		android:text="@string/search"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:id="@+id/button"
-		android:layout_below="@+id/Arr"
-		android:layout_alignStart="@+id/Arr"/>
-
-	<ScrollView
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:layout_weight="1"
-		android:layout_below="@+id/Day">
-
-		<LinearLayout
+    <LinearLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="horizontal">
@@ -109,7 +87,41 @@
 				android:layout_height="wrap_content"
 				android:id="@+id/result"
 				android:layout_weight="1"/>
-		</LinearLayout>
-	</ScrollView>
+        </LinearLayout>
+
+
+    <ImageButton
+        android:text="@string/search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button"
+        android:src="@drawable/ic_search"
+        android:background="@null"
+        android:layout_below="@+id/Arr"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"/>
+
+    <Button
+        android:text=""
+        android:layout_width="270px"
+        android:layout_height="wrap_content"
+        android:id="@+id/Day"
+        android:background="@null"
+        android:drawableLeft="@drawable/ic_action_name"
+        android:layout_marginEnd="27dp"
+        android:layout_below="@+id/Arr"
+        android:layout_toStartOf="@+id/button"
+        />
+
+    <ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+        android:background="#FFFFFFF"
+        android:id="@+id/scrollView2"
+        android:layout_below="@+id/focusView"
+        android:layout_alignParentStart="true">
+
+    </ScrollView>
 
 </RelativeLayout>

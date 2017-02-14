@@ -17,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		AutoCompleteTextView Dep = (AutoCompleteTextView)findViewById(R.id.Dep);
 		AutoCompleteTextView Via = (AutoCompleteTextView)findViewById(R.id.Via);
 		AutoCompleteTextView Arr = (AutoCompleteTextView)findViewById(R.id.Arr);
-		Button Search = (Button)findViewById(R.id.button);
+		ImageButton Search = (ImageButton)findViewById(R.id.imageButton);
 		Button Day = (Button)findViewById(R.id.Day);
 		Day.setText(getDate("yyyy/MM/dd"));
 		Search.setOnClickListener(this);
