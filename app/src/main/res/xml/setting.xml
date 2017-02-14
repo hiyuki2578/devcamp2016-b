@@ -3,10 +3,6 @@
 
 	<CheckBoxPreference
 		android:defaultValue="false"
-		android:title="@string/Plane"
-		android:key="plane"/>
-	<CheckBoxPreference
-		android:defaultValue="false"
 		android:title="@string/Shinkansen"
 		android:key="shinkansen"/>
 	<CheckBoxPreference

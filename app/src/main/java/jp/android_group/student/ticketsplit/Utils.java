@@ -33,10 +33,7 @@ class Utils {
 	}
 
 	static String getOption(SharedPreferences spf){
-		String options="";
-		if(!spf.getBoolean("plane",false)){
-			options += "&plane=false";
-		}
+		String options="&plane=false";
 		if(!spf.getBoolean("shinkansen",false)){
 			options += "&shinkansen=false";
 		}
