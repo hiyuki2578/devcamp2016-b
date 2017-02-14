@@ -8,4 +8,8 @@
 		<item name="colorAccent">@color/colorAccent</item>
 	</style>
 
+	<style name="ResultTheme" parent="Theme.AppCompat.Light.NoActionBar">
+		<item name="android:textColorPrimary">@color/toolbar_title</item>
+		<item name="android:textColorSecondary">@color/toolbar_icon</item>
+	</style>
 </resources>
