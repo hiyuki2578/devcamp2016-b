@@ -43,6 +43,16 @@ class Utils {
 		return str;
 	}
 
+	static void NoFocus(Context context, View view, boolean Focus, AutoCompleteTextView Ac){
+		if(!Focus){				//フォーカスが外れたとき
+			hideIME(context, view);
+		}else{
+			if(Ac.getText().length() != 0) {
+				Ac.showDropDown();
+			}
+		}
+	}
+
 	private static String[] getDb(Context context, String ans_name, String query, int Like){
 		DatabaseOpenHelper helper = new DatabaseOpenHelper(context);
 		SQLiteDatabase database = helper.getWritableDatabase();
