@@ -201,14 +201,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		switch (view.getId()) {
 			case R.id.button:
 				AutoCompleteTextView Dep = (AutoCompleteTextView)findViewById(R.id.Dep);
-				AutoCompleteTextView Via = (AutoCompleteTextView)findViewById(R.id.Via);
 				AutoCompleteTextView Arr = (AutoCompleteTextView)findViewById(R.id.Arr);
-				if(Dep.length() != 0 || Arr.length() != 0){
+				if(Dep.length() != 0 || Arr.length() != 0) {
 					search();
+				}else if(Dep.length() == 0 && Arr.length() == 0){
+					Toast.makeText(this, "出発地と目的地が入力されていません。", Toast.LENGTH_LONG).show();
+				}else if(Dep.length() == 0){
+					Toast.makeText(this, "出発地が入力されていません。", Toast.LENGTH_LONG).show();
 				}else{
-					Toast.makeText(this, "出発地または目的地が入力されていません。", Toast.LENGTH_LONG).show();
+					Toast.makeText(this, "目的地が入力されていません。", Toast.LENGTH_LONG).show();
 				}
-				search();
 				break;
 			case R.id.Day:
 				showDatePickerDialog(view);
