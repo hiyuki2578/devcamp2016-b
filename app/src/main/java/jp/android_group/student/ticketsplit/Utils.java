@@ -58,7 +58,7 @@ class Utils {
 		str = regex(str, "新快速", "");
 		str = regex(str, "ＪＲ特急", "JRexp");
 		str = regex(str, "特急", "");
-		str = regex(str, "伊豆急行線", "izukyu");
+		str = regex(str, "伊豆急行", "izukyu");
 		str = regex(str, "急行", "");
 		str = regex(str, "快速", "");
 		str = regex(str, "京阪神", "京阪神快速");
@@ -67,7 +67,7 @@ class Utils {
 		str = regex(str, "紀州路", "紀州路快速");
 		str = regex(str, "南海線空港", "南海線空港快速");
 		str = regex(str, "airport", "快速エアポート");
-		str = regex(str, "izukyu", "伊豆急行");
+		str = regex(str, "izukyu", "伊豆急行線");
 		str = regex(str, "JRexp", "ＪＲ特急");
 		return str;
 	}
