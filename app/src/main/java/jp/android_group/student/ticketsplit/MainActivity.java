@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -199,6 +200,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		hideIME(this, view);
 		switch (view.getId()) {
 			case R.id.button:
+				AutoCompleteTextView Dep = (AutoCompleteTextView)findViewById(R.id.Dep);
+				AutoCompleteTextView Via = (AutoCompleteTextView)findViewById(R.id.Via);
+				AutoCompleteTextView Arr = (AutoCompleteTextView)findViewById(R.id.Arr);
+				if(Dep.length() != 0 || Arr.length() != 0){
+					search();
+				}else{
+					Toast.makeText(this, "出発地または目的地が入力されていません。", Toast.LENGTH_LONG).show();
+				}
 				search();
 				break;
 			case R.id.Day:
