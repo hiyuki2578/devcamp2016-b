@@ -299,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 					for(int i = 0;i < Part.length();i++){
 						JSONObject Point_i = Part.getJSONObject(i);
 						JSONArray Point = Point_i.getJSONArray("Point");
-						text += Point.getJSONObject(0).getJSONObject("Station").getString("Name") + "駅\n" + Point_i.getJSONObject("Price").getString("Oneway") + "円\n";//+Point.getJSONObject(1).getJSONObject("Station").getString("Name")+"駅\n";
+						text += Point.getJSONObject(0).getJSONObject("Station").getString("Name") + "駅\n" + Point_i.getJSONObject("Price").getString("Oneway") + "円\n";
 					}
 					JSONObject Result = SearchResult.getJSONObject("ResultSet");
 					JSONArray Course = Result.getJSONArray("Course");
@@ -309,7 +309,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 					JSONArray Point = Route.getJSONArray("Point");
 					for(int i = 0;i < Point.length() - 1;i++){
 						line = getLineName(Line.getJSONObject(i).getString("Name"));
-						trans_t += Point.getJSONObject(i).getJSONObject("Station").getString("Name") + "駅\n" + line + "\n";// + Point.getJSONObject(i + 1).getJSONObject("Station").getString("Name") + "駅\n";
+						trans_t += Point.getJSONObject(i).getJSONObject("Station").getString("Name") + "駅\n" + line + "\n";
 					}
 					trans_t += Point.getJSONObject(Point.length() - 1).getJSONObject("Station").getString("Name") + "駅\n";
 					text += Point.getJSONObject(Point.length() - 1).getJSONObject("Station").getString("Name") + "駅\n";
@@ -332,10 +332,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 							line = getLineName(Line.getJSONObject(i).getString("Name"));
 							text += Point.getJSONObject(i).getJSONObject("Station").getString("Name") + "駅\n" + line + "\n";
 						}
+						int stat = 0;
 						for (int j = 1; j < Price.length() - 1; j++) {
 							if(Price.getJSONObject(j).getString("kind").equals("Fare")) {
 								int station = Integer.parseInt(Price.getJSONObject(j).getString("fromLineIndex"));
-								fare += Point.getJSONObject(station - 1).getJSONObject("Station").getString("Name") + "駅\n" + Price.getJSONObject(j).getString("Oneway") + "円\n";
+								if (stat != station) {
+									fare += Point.getJSONObject(station - 1).getJSONObject("Station").getString("Name") + "駅\n" + Price.getJSONObject(j).getJSONObject("Oneway").getString("text") + "円\n";
+								}
+								stat = station;
 							}
 						}
 						text += Point.getJSONObject(Point.length() - 1).getJSONObject("Station").getString("Name") + "駅";
@@ -344,24 +348,56 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 						trans.setText(text);
 					}catch (JSONException er) {
 						er.printStackTrace();
-						try{
+						try {
 							String text = "";
-							String trans_t = "";
+							String fare = "";
 							String line;
 							JSONObject Result = SearchResult.getJSONObject("ResultSet");
 							JSONArray Course = Result.getJSONArray("Course");
 							JSONObject SearchType = Course.getJSONObject(num);
 							JSONArray Price = SearchType.getJSONArray("Price");
 							JSONObject Route = SearchType.getJSONObject("Route");
-							JSONObject Line = Route.getJSONObject("Line");
+							JSONArray Line = Route.getJSONArray("Line");
 							JSONArray Point = Route.getJSONArray("Point");
-							line = getLineName(Line.getString("Name"));
-							text += Point.getJSONObject(0).getJSONObject("Station").getString("Name")+"駅\n"+line+"\n"+Price.getJSONObject(0).getString("Oneway")+"円\n"+Point.getJSONObject(1).getJSONObject("Station").getString("Name")+"駅\n";
-							trans_t += Point.getJSONObject(0).getJSONObject("Station").getString("Name")+"駅\n"+line+"\n"+Point.getJSONObject(1).getJSONObject("Station").getString("Name")+"駅\n";
-							result.setText(text);
-							trans.setText(trans_t);
-						}catch (JSONException err) {
+							for (int i = 0; i < Point.length() - 1; i++) {
+								line = getLineName(Line.getJSONObject(i).getString("Name"));
+								text += Point.getJSONObject(i).getJSONObject("Station").getString("Name") + "駅\n" + line + "\n";
+							}
+							int stat = 0;
+							for (int j = 1; j < Price.length() - 1; j++) {
+								if (Price.getJSONObject(j).getString("kind").equals("Fare")) {
+									int station = Integer.parseInt(Price.getJSONObject(j).getString("fromLineIndex"));
+									if (stat != station) {
+										fare += Point.getJSONObject(station - 1).getJSONObject("Station").getString("Name") + "駅\n" + Price.getJSONObject(j).getString("Oneway") + "円\n";
+									}
+									stat = station;
+								}
+							}
+							text += Point.getJSONObject(Point.length() - 1).getJSONObject("Station").getString("Name") + "駅";
+							fare += Point.getJSONObject(Point.length() - 1).getJSONObject("Station").getString("Name") + "駅";
+							result.setText(fare);
+							trans.setText(text);
+						} catch (JSONException err) {
 							err.printStackTrace();
+							try {
+								String text = "";
+								String trans_t = "";
+								String line;
+								JSONObject Result = SearchResult.getJSONObject("ResultSet");
+								JSONArray Course = Result.getJSONArray("Course");
+								JSONObject SearchType = Course.getJSONObject(num);
+								JSONArray Price = SearchType.getJSONArray("Price");
+								JSONObject Route = SearchType.getJSONObject("Route");
+								JSONObject Line = Route.getJSONObject("Line");
+								JSONArray Point = Route.getJSONArray("Point");
+								line = getLineName(Line.getString("Name"));
+								text += Point.getJSONObject(0).getJSONObject("Station").getString("Name") + "駅\n" + line + "\n" + Price.getJSONObject(0).getString("Oneway") + "円\n" + Point.getJSONObject(1).getJSONObject("Station").getString("Name") + "駅\n";
+								trans_t += Point.getJSONObject(0).getJSONObject("Station").getString("Name") + "駅\n" + line + "\n" + Point.getJSONObject(1).getJSONObject("Station").getString("Name") + "駅\n";
+								result.setText(text);
+								trans.setText(trans_t);
+							} catch (JSONException erro) {
+								erro.printStackTrace();
+							}
 						}
 					}
 				}
@@ -384,10 +420,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 						line = getLineName(Line.getJSONObject(i).getString("Name"));
 						text += Point.getJSONObject(i).getJSONObject("Station").getString("Name") + "駅\n" + line + "\n";
 					}
+					int stat = 0;
 					for (int j = 1; j < Price.length() - 1; j++) {
 						if(Price.getJSONObject(j).getString("kind").equals("Fare")) {
 							int station = Integer.parseInt(Price.getJSONObject(j).getString("fromLineIndex"));
-							fare += Point.getJSONObject(station - 1).getJSONObject("Station").getString("Name") + "駅\n" + Price.getJSONObject(j).getString("Oneway") + "円\n";
+							if (stat != station) {
+								fare += Point.getJSONObject(station - 1).getJSONObject("Station").getString("Name") + "駅\n" + Price.getJSONObject(j).getJSONObject("Oneway").getString("text") + "円\n";
+							}
+							stat = station;
 						}
 					}
 					text += Point.getJSONObject(Point.length() - 1).getJSONObject("Station").getString("Name") + "駅";
@@ -396,24 +436,56 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 					trans.setText(text);
 				}catch (JSONException er) {
 					er.printStackTrace();
-					try{
+					try {
 						String text = "";
-						String trans_t = "";
+						String fare = "";
 						String line;
 						JSONObject Result = SearchResult.getJSONObject("ResultSet");
 						JSONArray Course = Result.getJSONArray("Course");
 						JSONObject SearchType = Course.getJSONObject(num);
 						JSONArray Price = SearchType.getJSONArray("Price");
 						JSONObject Route = SearchType.getJSONObject("Route");
-						JSONObject Line = Route.getJSONObject("Line");
+						JSONArray Line = Route.getJSONArray("Line");
 						JSONArray Point = Route.getJSONArray("Point");
-						line = getLineName(Line.getString("Name"));
-						text += Point.getJSONObject(0).getJSONObject("Station").getString("Name")+"駅\n"+line+"\n"+Price.getJSONObject(0).getString("Oneway")+"円\n"+Point.getJSONObject(1).getJSONObject("Station").getString("Name")+"駅\n";
-						trans_t += Point.getJSONObject(0).getJSONObject("Station").getString("Name")+"駅\n"+line+"\n"+Point.getJSONObject(1).getJSONObject("Station").getString("Name")+"駅\n";
-						result.setText(text);
-						trans.setText(trans_t);
-					}catch (JSONException err) {
+						for (int i = 0; i < Point.length() - 1; i++) {
+							line = getLineName(Line.getJSONObject(i).getString("Name"));
+							text += Point.getJSONObject(i).getJSONObject("Station").getString("Name") + "駅\n" + line + "\n";
+						}
+						int stat = 0;
+						for (int j = 1; j < Price.length() - 1; j++) {
+							if (Price.getJSONObject(j).getString("kind").equals("Fare")) {
+								int station = Integer.parseInt(Price.getJSONObject(j).getString("fromLineIndex"));
+								if (stat != station) {
+									fare += Point.getJSONObject(station - 1).getJSONObject("Station").getString("Name") + "駅\n" + Price.getJSONObject(j).getString("Oneway") + "円\n";
+								}
+								stat = station;
+							}
+						}
+						text += Point.getJSONObject(Point.length() - 1).getJSONObject("Station").getString("Name") + "駅";
+						fare += Point.getJSONObject(Point.length() - 1).getJSONObject("Station").getString("Name") + "駅";
+						result.setText(fare);
+						trans.setText(text);
+					} catch (JSONException err) {
 						err.printStackTrace();
+						try {
+							String text = "";
+							String trans_t = "";
+							String line;
+							JSONObject Result = SearchResult.getJSONObject("ResultSet");
+							JSONArray Course = Result.getJSONArray("Course");
+							JSONObject SearchType = Course.getJSONObject(num);
+							JSONArray Price = SearchType.getJSONArray("Price");
+							JSONObject Route = SearchType.getJSONObject("Route");
+							JSONObject Line = Route.getJSONObject("Line");
+							JSONArray Point = Route.getJSONArray("Point");
+							line = getLineName(Line.getString("Name"));
+							text += Point.getJSONObject(0).getJSONObject("Station").getString("Name") + "駅\n" + line + "\n" + Price.getJSONObject(0).getString("Oneway") + "円\n" + Point.getJSONObject(1).getJSONObject("Station").getString("Name") + "駅\n";
+							trans_t += Point.getJSONObject(0).getJSONObject("Station").getString("Name") + "駅\n" + line + "\n" + Point.getJSONObject(1).getJSONObject("Station").getString("Name") + "駅\n";
+							result.setText(text);
+							trans.setText(trans_t);
+						} catch (JSONException erro) {
+							erro.printStackTrace();
+						}
 					}
 				}
 			}
