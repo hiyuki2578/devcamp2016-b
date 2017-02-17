@@ -2,8 +2,6 @@ package jp.android_group.student.ticketsplit;
 
 import android.content.Context;
 import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.widget.NestedScrollView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -251,11 +249,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		AutoCompleteTextView Arr = (AutoCompleteTextView)findViewById(R.id.Arr);
 		final TextView textView = (TextView)findViewById(R.id.result);
 		Button Day = (Button)findViewById(R.id.Day);
-		String Day_s = regex(Day.getText().toString(), "/", "");
-		String uri = "https://api.ekispert.jp/v1/json/search/course/plain?key=" + Key + "&from=" + Dep.getText() + "&via=" + Via.getText() + "&to=" + Arr.getText() + getOption(spf) + "&date=" + Day_s;
-		if(Via.length() == 0){
-			uri = "https://api.ekispert.jp/v1/json/search/course/plain?key=" + Key + "&from=" + Dep.getText() + "&to=" + Arr.getText() + getOption(spf) + "&date=" + Day_s;
-		}
+		String uri = getApiUri.searchCoursePlain(Dep.getText().toString(), Via.getText().toString(), Arr.getText().toString(), getOption(spf), regex(Day.getText().toString(), "/", ""));
 		mRequestQueue.add(new JsonObjectRequest(Request.Method.GET, uri, null, new Response.Listener<JSONObject>() {
 			@Override
 			public void onResponse(JSONObject response){
@@ -285,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	public void price(String SerializeData, final JSONObject SearchResult, final int num){
 		final TextView result = (TextView)findViewById(R.id.result);
 		final TextView trans = (TextView)findViewById(R.id.trans);
-		String uri = "https://api.ekispert.jp/v1/json/course/fare/divided?key=" + Key + "&serializeData=" + SerializeData;
+		String uri = getApiUri.courseFareDivided(SerializeData);
 		mRequestQueue.add(new JsonObjectRequest(Request.Method.GET, uri, null, new Response.Listener<JSONObject>() {
 			@Override
 			public void onResponse(JSONObject response){
