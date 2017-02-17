@@ -38,7 +38,6 @@ import org.json.JSONObject;
 import java.util.Locale;
 
 import static jp.android_group.student.ticketsplit.Utils.*;
-import static jp.android_group.student.ticketsplit.getApiKey.*;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener, android.app.DatePickerDialog.OnDateSetListener {
 
@@ -46,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	private View mFocusView;
 	private BottomSheetBehavior behavior;
 	private Toolbar toolbar;
-	String Key = getKey();
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
